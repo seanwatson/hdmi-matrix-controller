@@ -85,7 +85,8 @@ class HdmiMatrixController(object):
         data[2] = arg2
         cmd = _CMD_HEADER + cmd_code + data
         HdmiMatrixController._append_checksum(cmd)
-        return ''.join(chr(c) for c in cmd)
+        serial.iterbytes(cmd)
+        return cmd
 
     @staticmethod
     def _append_checksum(cmd):
@@ -336,13 +337,11 @@ class HdmiMatrixController(object):
             HdmiMatrixControllerException: Error writing to serial.
         """
         try:
-            logging.debug('Sending cmd: %s.',
-                          ' '.join(c.encode('hex') for c in cmd))
+            logging.debug('Sending cmd: %s.',' '.join(hex(c) for c in cmd))
             self._ser.write(cmd)
         except (serial.SerialException, serial.SerialTimeoutException) as exception:
             logging.error('Error writing to serial: %s', str(exception))
             raise HdmiMatrixControllerException(exception, 'Error writing to serial.')
-
     def _receive_response(self):
         """Reads and validates a response.
 
