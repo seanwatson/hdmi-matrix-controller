@@ -69,7 +69,7 @@ class HdmiMatrixController(object):
         self._ser = serial_device
 
     @staticmethod
-        def _generate_cmd(cmd_code, arg1=0, arg2=0):
+    def _generate_cmd(cmd_code, arg1=0, arg2=0):
         """Builds a command out of all the pieces of a command.
 
         Args:
